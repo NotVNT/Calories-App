@@ -4,6 +4,7 @@ import 'onboarding_theme.dart';
 import 'screens/intro_screen.dart';
 import 'screens/calorie_tracking_screen.dart';
 import 'screens/community_screen.dart';
+import '../views/home/home_screen.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -35,8 +36,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
         curve: Curves.easeInOut,
       );
     } else {
-      // Navigate to main app or home screen
-      // TODO: Implement navigation to home screen
+      // Navigate to home screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
     }
   }
 
