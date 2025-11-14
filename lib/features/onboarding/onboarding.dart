@@ -1,0 +1,31 @@
+// Onboarding feature exports
+export 'data/services/nutrition_calculator.dart';
+export 'data/services/onboarding_logger.dart';
+export 'data/services/onboarding_persistence_service.dart';
+export 'domain/nutrition_result.dart';
+export 'domain/onboarding_model.dart';
+export 'domain/profile_model.dart';
+export 'presentation/controllers/onboarding_controller.dart';
+export 'presentation/mixins/onboarding_analytics_mixin.dart';
+export 'presentation/pages/onboarding_page.dart';
+export 'presentation/screens/activity_level_step_screen.dart';
+export 'presentation/screens/calculating_screen.dart';
+export 'presentation/screens/current_weight_step_screen.dart';
+export 'presentation/screens/dob_step_screen.dart';
+export 'presentation/screens/gender_step_screen.dart';
+export 'presentation/screens/goal_type_step_screen.dart';
+export 'presentation/screens/height_step_screen.dart';
+export 'presentation/screens/macro_step_screen.dart';
+export 'presentation/screens/nickname_step_screen.dart';
+export 'presentation/screens/result_summary_step_screen.dart';
+export 'presentation/screens/target_intake_step_screen.dart';
+export 'presentation/screens/target_weight_step_screen.dart';
+export 'presentation/screens/welcome_screen.dart';
+export 'presentation/screens/weekly_delta_step_screen.dart';
+export 'presentation/widgets/donut_chart_widget.dart';
+export 'presentation/widgets/height_ruler_widget.dart';
+export 'presentation/widgets/number_picker_widget.dart';
+export 'presentation/widgets/progress_indicator_widget.dart';
+export 'presentation/widgets/speech_bubble_widget.dart';
+export 'presentation/widgets/weight_ruler_widget.dart';
+
