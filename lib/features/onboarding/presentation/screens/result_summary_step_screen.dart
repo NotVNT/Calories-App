@@ -181,7 +181,7 @@ class _TDEECard extends StatelessWidget {
             Text(
               'kcal',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.nearBlack.withOpacity(0.7),
+                    color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                   ),
             ),
           ],
@@ -275,7 +275,7 @@ class _DeficitSurplusCard extends StatelessWidget {
                   child: Text(
                     'kcal',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.nearBlack.withOpacity(0.7),
+                          color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                         ),
                   ),
                 ),
@@ -284,7 +284,7 @@ class _DeficitSurplusCard extends StatelessWidget {
             if (!isMaintain) ...[
               const SizedBox(height: 12),
               Divider(
-                color: AppColors.nearBlack.withOpacity(0.2),
+                color: AppColors.nearBlack.withAlpha((0.2 * 255).round()),
                 thickness: 1,
               ),
               const SizedBox(height: 12),
@@ -294,7 +294,7 @@ class _DeficitSurplusCard extends StatelessWidget {
                   Text(
                     'TDEE',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.nearBlack.withOpacity(0.7),
+                          color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                         ),
                   ),
                   Text(
@@ -313,7 +313,7 @@ class _DeficitSurplusCard extends StatelessWidget {
                   Text(
                     'Calo mục tiêu',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.nearBlack.withOpacity(0.7),
+                          color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                         ),
                   ),
                   Text(
@@ -387,7 +387,7 @@ class _GoalDateCard extends StatelessWidget {
                   ? 'Còn khoảng $weeksUntilGoal tuần'
                   : 'Đã đạt mục tiêu',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.nearBlack.withOpacity(0.7),
+                    color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                   ),
             ),
           ],
@@ -408,7 +408,7 @@ class _InfoTooltip extends StatelessWidget {
       message: message,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.nearBlack.withOpacity(0.9),
+        color: AppColors.nearBlack.withAlpha((0.9 * 255).round()),
         borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
       ),
       textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -469,12 +469,12 @@ class _InfoTooltip extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.nearBlack.withOpacity(0.1),
+              color: AppColors.nearBlack.withAlpha((0.1 * 255).round()),
             ),
             child: Icon(
               Icons.info_outline,
               size: 16,
-              color: AppColors.nearBlack.withOpacity(0.7),
+              color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
             ),
           ),
         ),
@@ -482,4 +482,5 @@ class _InfoTooltip extends StatelessWidget {
     );
   }
 }
+
 

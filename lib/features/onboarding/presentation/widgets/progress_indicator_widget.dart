@@ -29,7 +29,7 @@ class ProgressIndicatorWidget extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 8,
-            backgroundColor: AppColors.charmingGreen.withOpacity(0.3),
+            backgroundColor: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
             valueColor: const AlwaysStoppedAnimation<Color>(AppColors.mintGreen),
           ),
         ),
@@ -37,4 +37,5 @@ class ProgressIndicatorWidget extends StatelessWidget {
     );
   }
 }
+
 

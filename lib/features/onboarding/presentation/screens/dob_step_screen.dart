@@ -212,7 +212,7 @@ class _DobStepScreenState extends ConsumerState<DobStepScreen> {
                   borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withAlpha((0.05 * 255).round()),
                       blurRadius: 16,
                       offset: const Offset(0, 8),
                     ),
@@ -344,7 +344,7 @@ class _DobStepScreenState extends ConsumerState<DobStepScreen> {
             onSelectedItemChanged: onSelectedItemChanged,
             selectionOverlay: Container(
               decoration: BoxDecoration(
-                color: AppColors.mintGreen.withOpacity(0.12),
+                color: AppColors.mintGreen.withAlpha((0.12 * 255).round()),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
               ),
             ),
@@ -368,4 +368,5 @@ class _DobStepScreenState extends ConsumerState<DobStepScreen> {
     );
   }
 }
+
 

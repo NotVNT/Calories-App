@@ -54,13 +54,13 @@ class HomeCalorieCard extends ConsumerWidget {
               colors: [
                 const Color(0xFF1E2432),
                 const Color(0xFF2A3040),
-                AppColors.nearBlack.withOpacity(0.85),
+                AppColors.nearBlack.withAlpha((0.85 * 255).round()),
               ],
             ),
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withAlpha((0.15 * 255).round()),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -204,7 +204,7 @@ class _CalorieProgressRing extends StatelessWidget {
             child: CircularProgressIndicator(
               value: summary.progress,
               strokeWidth: 14,
-              backgroundColor: Colors.white.withOpacity(0.12),
+              backgroundColor: Colors.white.withAlpha((0.12 * 255).round()),
               valueColor:
                   AlwaysStoppedAnimation<Color>(AppColors.mintGreen),
             ),
@@ -232,4 +232,5 @@ class _CalorieProgressRing extends StatelessWidget {
     );
   }
 }
+
 

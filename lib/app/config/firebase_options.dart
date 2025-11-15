@@ -36,10 +36,10 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        // Fallback: use the Android FirebaseOptions on Windows for now.
+        // To generate a proper Windows configuration, run the FlutterFire CLI:
+        // `flutterfire configure` and include the 'windows' platform.
+        return android;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '

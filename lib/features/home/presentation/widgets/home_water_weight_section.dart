@@ -52,7 +52,7 @@ class _WaterCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
+            color: Colors.black.withAlpha((0.07 * 255).round()),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -66,7 +66,7 @@ class _WaterCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.mintGreen.withOpacity(0.2),
+                  color: AppColors.mintGreen.withAlpha((0.2 * 255).round()),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -102,7 +102,7 @@ class _WaterCard extends ConsumerWidget {
             child: LinearProgressIndicator(
               value: water.progress,
               minHeight: 12,
-              backgroundColor: AppColors.mintGreen.withOpacity(0.12),
+              backgroundColor: AppColors.mintGreen.withAlpha((0.12 * 255).round()),
               valueColor: const AlwaysStoppedAnimation<Color>(
                 AppColors.mintGreen,
               ),
@@ -169,7 +169,7 @@ class _WeightCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
+            color: Colors.black.withAlpha((0.07 * 255).round()),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -276,7 +276,7 @@ class _WeightTrendPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final fillPaint = Paint()
-      ..color = AppColors.mintGreen.withOpacity(0.2)
+      ..color = AppColors.mintGreen.withAlpha((0.2 * 255).round())
       ..style = PaintingStyle.fill;
 
     final minWeight = points
@@ -319,4 +319,5 @@ class _WeightTrendPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
 

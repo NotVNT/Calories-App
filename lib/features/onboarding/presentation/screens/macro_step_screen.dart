@@ -224,8 +224,8 @@ class _MacroStepScreenState extends ConsumerState<MacroStepScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: isValid
-                          ? AppColors.mintGreen.withOpacity(0.2)
-                          : AppColors.error.withOpacity(0.1),
+                          ? AppColors.mintGreen.withAlpha((0.2 * 255).round())
+                          : AppColors.error.withAlpha((0.1 * 255).round()),
                       borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                       border: Border.all(
                         color: isValid
@@ -451,7 +451,7 @@ class _MacroLegendItem extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-        side: BorderSide(color: AppColors.charmingGreen.withOpacity(0.3)),
+        side: BorderSide(color: AppColors.charmingGreen.withAlpha((0.3 * 255).round())),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -571,9 +571,9 @@ class _MacroSlider extends StatelessWidget {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: color,
-            inactiveTrackColor: color.withOpacity(0.3),
+            inactiveTrackColor: color.withAlpha((0.3 * 255).round()),
             thumbColor: color,
-            overlayColor: color.withOpacity(0.2),
+            overlayColor: color.withAlpha((0.2 * 255).round()),
             trackHeight: 6,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 24),
@@ -591,4 +591,5 @@ class _MacroSlider extends StatelessWidget {
     );
   }
 }
+
 

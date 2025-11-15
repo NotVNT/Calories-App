@@ -104,7 +104,7 @@ class _HeightStepScreenState extends ConsumerState<HeightStepScreen> {
                     vertical: 24,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.charmingGreen.withOpacity(0.3),
+                    color: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                     borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   ),
                   child: Column(
@@ -140,7 +140,7 @@ class _HeightStepScreenState extends ConsumerState<HeightStepScreen> {
                   borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withAlpha((0.05 * 255).round()),
                       blurRadius: 16,
                       offset: const Offset(0, 8),
                     ),
@@ -193,4 +193,5 @@ class _HeightStepScreenState extends ConsumerState<HeightStepScreen> {
     );
   }
 }
+
 

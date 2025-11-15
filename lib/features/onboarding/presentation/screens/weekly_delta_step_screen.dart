@@ -122,7 +122,7 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
                     vertical: 24,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.charmingGreen.withOpacity(0.3),
+                    color: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                     borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   ),
                   child: Column(
@@ -161,7 +161,7 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.mintGreen.withOpacity(0.2),
+                            color: AppColors.mintGreen.withAlpha((0.2 * 255).round()),
                             borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                             border: Border.all(
                               color: AppColors.mintGreen,
@@ -191,7 +191,7 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   border: Border.all(
-                    color: AppColors.charmingGreen.withOpacity(0.3),
+                    color: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                     width: 1,
                   ),
                 ),
@@ -227,7 +227,7 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
                   borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withAlpha((0.05 * 255).round()),
                       blurRadius: 16,
                       offset: const Offset(0, 8),
                     ),
@@ -242,7 +242,7 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
                       divisions: ((_maxDelta - _minDelta) / _step).toInt(),
                       label: '${_weeklyDelta.toStringAsFixed(2)} kg/tuần',
                       activeColor: AppColors.mintGreen,
-                      inactiveColor: AppColors.charmingGreen.withOpacity(0.3),
+                      inactiveColor: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                       onChanged: _onDeltaChanged,
                     ),
                     const SizedBox(height: 8),
@@ -261,7 +261,7 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.mintGreen.withOpacity(0.2),
+                                  color: AppColors.mintGreen.withAlpha((0.2 * 255).round()),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
@@ -327,4 +327,5 @@ class _WeeklyDeltaStepScreenState extends ConsumerState<WeeklyDeltaStepScreen> {
     );
   }
 }
+
 

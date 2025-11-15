@@ -68,12 +68,12 @@ class HomeHeaderSection extends ConsumerWidget {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.mintGreen.withOpacity(0.9)
+                          ? AppColors.mintGreen.withAlpha((0.9 * 255).round())
                           : Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withAlpha((0.05 * 255).round()),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -81,7 +81,7 @@ class HomeHeaderSection extends ConsumerWidget {
                       border: Border.all(
                         color: isSelected
                             ? AppColors.mintGreen
-                            : AppColors.charmingGreen.withOpacity(0.4),
+                            : AppColors.charmingGreen.withAlpha((0.4 * 255).round()),
                       ),
                     ),
                     child: Column(
@@ -161,4 +161,5 @@ class HomeHeaderSection extends ConsumerWidget {
     }
   }
 }
+
 

@@ -405,7 +405,7 @@ class _CustomTextField extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: AuthTheme.bodyStyle.copyWith(
-                color: AuthTheme.mediumGray.withOpacity(0.6),
+                color: AuthTheme.mediumGray.withAlpha((0.6 * 255).round()),
               ),
               prefixIcon: Icon(prefixIcon, color: AuthTheme.mintGreen),
               suffixIcon: suffixIcon,
@@ -429,4 +429,5 @@ class _CustomTextField extends StatelessWidget {
     );
   }
 }
+
 

@@ -139,7 +139,7 @@ class _CurrentWeightStepScreenState extends ConsumerState<CurrentWeightStepScree
                     vertical: 24,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.charmingGreen.withOpacity(0.3),
+                    color: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                     borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   ),
                   child: Column(
@@ -178,12 +178,12 @@ class _CurrentWeightStepScreenState extends ConsumerState<CurrentWeightStepScree
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                     border: Border.all(
-                      color: _getBMIColor(bmi).withOpacity(0.3),
+                      color: _getBMIColor(bmi).withAlpha((0.3 * 255).round()),
                       width: 2,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withAlpha((0.05 * 255).round()),
                         blurRadius: 16,
                         offset: const Offset(0, 8),
                       ),
@@ -217,7 +217,7 @@ class _CurrentWeightStepScreenState extends ConsumerState<CurrentWeightStepScree
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: _getBMIColor(bmi).withOpacity(0.2),
+                          color: _getBMIColor(bmi).withAlpha((0.2 * 255).round()),
                           borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                           border: Border.all(
                             color: _getBMIColor(bmi),
@@ -246,7 +246,7 @@ class _CurrentWeightStepScreenState extends ConsumerState<CurrentWeightStepScree
                   borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withAlpha((0.05 * 255).round()),
                       blurRadius: 16,
                       offset: const Offset(0, 8),
                     ),
@@ -350,4 +350,5 @@ class _WeightPickerWidget extends StatelessWidget {
     );
   }
 }
+
 

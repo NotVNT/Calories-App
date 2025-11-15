@@ -17,7 +17,7 @@ class HomeMacroSection extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).round()),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -58,7 +58,7 @@ class _MacroProgressRow extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: macro.color.withOpacity(0.15),
+            color: macro.color.withAlpha((0.15 * 255).round()),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -94,7 +94,7 @@ class _MacroProgressRow extends StatelessWidget {
                 child: LinearProgressIndicator(
                   value: macro.progress,
                   minHeight: 10,
-                  backgroundColor: macro.color.withOpacity(0.12),
+                  backgroundColor: macro.color.withAlpha((0.12 * 255).round()),
                   valueColor: AlwaysStoppedAnimation<Color>(macro.color),
                 ),
               ),
@@ -105,4 +105,5 @@ class _MacroProgressRow extends StatelessWidget {
     );
   }
 }
+
 

@@ -98,7 +98,7 @@ class _AddMealItemBottomSheetState extends State<AddMealItemBottomSheet> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: widget.mealType.color.withOpacity(0.2),
+                    color: widget.mealType.color.withAlpha((0.2 * 255).round()),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -372,4 +372,5 @@ class _AddMealItemBottomSheetState extends State<AddMealItemBottomSheet> {
     }
   }
 }
+
 

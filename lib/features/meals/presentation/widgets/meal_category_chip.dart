@@ -20,13 +20,13 @@ class MealCategoryChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: isSelected
-            ? category.accent.withOpacity(0.9)
-            : category.accent.withOpacity(0.18),
+            ? category.accent.withAlpha((0.9 * 255).round())
+            : category.accent.withAlpha((0.18 * 255).round()),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isSelected
               ? category.accent
-              : AppColors.charmingGreen.withOpacity(0.4),
+              : AppColors.charmingGreen.withAlpha((0.4 * 255).round()),
         ),
       ),
       child: Row(
@@ -50,4 +50,5 @@ class MealCategoryChip extends StatelessWidget {
     );
   }
 }
+
 

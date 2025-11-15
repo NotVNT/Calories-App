@@ -18,7 +18,7 @@ class AuthTheme {
 
   static List<BoxShadow> get softShadow => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.08),
+          color: Colors.black.withAlpha((0.08 * 255).round()),
           blurRadius: 12,
           offset: const Offset(0, 4),
         ),
@@ -50,4 +50,5 @@ class AuthTheme {
         fontWeight: FontWeight.w600,
       );
 }
+
 

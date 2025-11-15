@@ -55,7 +55,7 @@ class _SpeechBubblePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final borderPaint = Paint()
-      ..color = AppColors.charmingGreen.withOpacity(0.3)
+      ..color = AppColors.charmingGreen.withAlpha((0.3 * 255).round())
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
@@ -83,4 +83,5 @@ class _SpeechBubblePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
 

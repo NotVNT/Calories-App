@@ -15,7 +15,7 @@ class AppStyles {
   // Card Shadow
   static List<BoxShadow> cardShadow = [
     BoxShadow(
-      color: Colors.black.withOpacity(0.05),
+      color: Colors.black.withAlpha((0.05 * 255).round()),
       blurRadius: 10,
       offset: const Offset(0, 2),
     ),
@@ -60,4 +60,5 @@ class AppStyles {
     color: Colors.grey[600],
   );
 }
+
 

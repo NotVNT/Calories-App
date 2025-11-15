@@ -1,333 +1,619 @@
+// Adapted account/profile UI from feature/ui-thien
+// Uses Stream from ProfileRepository and Riverpod ConsumerWidget
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:calories_app/data/firebase/profile_repository.dart';
+import 'package:calories_app/services/profile_service.dart';
 import 'package:calories_app/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:calories_app/shared/state/auth_providers.dart';
+import 'package:calories_app/ui/components/avatar_circle.dart';
+import 'package:calories_app/ui/components/macro_ring.dart';
+import 'package:calories_app/ui/screens/account/physical_profile_screen.dart';
+import 'package:calories_app/ui/screens/account/targets_screen.dart';
 
 class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final repo = ProfileRepository();
     final user = FirebaseAuth.instance.currentUser;
-    
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Tài khoản',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const Text('Hồ sơ cá nhân'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.black87),
-            onPressed: () {
-              // TODO: Navigate to settings
-            },
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
+            icon: const CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.transparent,
+              child: Icon(Icons.settings, size: 20),
+            ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // no-op: could call repo.watchCurrentProfile but it's a stream
+          return Future.value();
+        },
+        child: StreamBuilder<Map<String, dynamic>?>(
+          stream: repo.watchCurrentProfile(),
+          builder: (context, snapshot) {
+            final profile = snapshot.data ?? {};
+            final name =
+                profile['nickname'] ?? user?.displayName ?? 'Người dùng';
+            final updatedAt = profile['createdAt'] is String
+                ? DateTime.tryParse(profile['createdAt'])
+                : null;
+            final currentCalories = 850;
+            final targetCalories = (profile['targetKcal'] is num)
+                ? (profile['targetKcal'] as num).toInt()
+                : 2000;
+
+            return ListView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
+              children: [
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AvatarCircle(
+                        size: 84,
+                        avatarUrl: profile['avatarUrl'] as String?,
+                        onAvatarPicked: (xfile) async {
+                          if (xfile == null) return;
+                          final uid = FirebaseAuth.instance.currentUser?.uid;
+                          if (uid == null) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Không có người dùng hiện tại'),
+                                ),
+                              );
+                            }
+                            return;
+                          }
+                          try {
+                            final service = await ProfileService.create();
+                            final url = await service.uploadAvatar(uid, xfile);
+                            if (url != null) {
+                              // Update the canonical profile (profiles subcollection)
+                              final service = await ProfileService.create();
+                              await service.updateCurrentProfileFields(uid, {
+                                'avatarUrl': url,
+                              });
+                            }
+                          } catch (e) {
+                            debugPrint('upload avatar failed: $e');
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Tải ảnh thất bại: $e')),
+                              );
+                            }
+                          }
+                        },
+                        onUrlSubmitted: (url) async {
+                          final uid = FirebaseAuth.instance.currentUser?.uid;
+                          if (uid == null) return;
+                          try {
+                            final service = await ProfileService.create();
+                            await service.updateCurrentProfileFields(uid, {
+                              'avatarUrl': url,
+                            });
+                          } catch (e) {
+                            debugPrint('set avatar url failed: $e');
+                          }
+                        },
+                        onClear: () async {
+                          final uid = FirebaseAuth.instance.currentUser?.uid;
+                          if (uid == null) return;
+                          try {
+                            final service = await ProfileService.create();
+                            await service.updateCurrentProfileFields(uid, {
+                              'avatarUrl': null,
+                            });
+                          } catch (e) {
+                            debugPrint('clear avatar failed: $e');
+                          }
+                        },
+                      ),
+                      Positioned(
+                        right:
+                            MediaQuery.of(context).size.width / 2 - 84 / 2 - 8,
+                        bottom: 6,
+                        child: GestureDetector(
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/edit_profile'),
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              shape: BoxShape.circle,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: Text(
+                    name,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Center(
+                  child: Text(
+                    updatedAt != null
+                        ? 'Đã tham gia từ ${_formatJoinDate(updatedAt)}'
+                        : 'Đã tham gia',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12.0,
+                      horizontal: 8.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _statChip(
+                          context,
+                          Icons.calendar_today_outlined,
+                          '${profile['age'] ?? '--'} tuổi',
+                        ),
+                        Container(
+                          height: 28,
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        ),
+                        _statChip(
+                          context,
+                          Icons.accessibility_new,
+                          profile['heightCm'] != null
+                              ? '${profile['heightCm'].toString()} cm'
+                              : '--',
+                        ),
+                        Container(
+                          height: 28,
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        ),
+                        _statChip(
+                          context,
+                          Icons.monitor_weight_outlined,
+                          profile['weightKg'] != null
+                              ? '${(profile['weightKg'] as num).toStringAsFixed(0)} kg'
+                              : '--',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PhysicalProfileScreen(),
+                    ),
+                  ),
+                  child: const Text(
+                    'Hồ sơ thể chất',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(height: 18),
+
+                _journeyCard(context, profile),
+                const SizedBox(height: 18),
+
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Mục tiêu dinh dưỡng & đa lượng',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            MacroRing(
+                              currentCalories: currentCalories,
+                              targetCalories: targetCalories,
+                              size: 110,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _macroRow(
+                                    context,
+                                    'Chất đạm',
+                                    '20%',
+                                    '88g',
+                                    Colors.red,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  _macroRow(
+                                    context,
+                                    'Đường bột',
+                                    '50%',
+                                    '219g',
+                                    Colors.blue,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  _macroRow(
+                                    context,
+                                    'Chất béo',
+                                    '30%',
+                                    '58g',
+                                    Colors.orange,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const TargetsScreen(),
+                            ),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12.0),
+                            child: Text('Tùy chỉnh mục tiêu'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+
+                Text(
+                  'Xem báo cáo thống kê',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _iconTile(
+                      context,
+                      Icons.restaurant,
+                      'Dinh dưỡng',
+                      route: '/report/nutrition',
+                    ),
+                    _iconTile(
+                      context,
+                      Icons.fitness_center,
+                      'Tập luyện',
+                      route: '/report/workout',
+                    ),
+                    _iconTile(
+                      context,
+                      Icons.directions_walk,
+                      'Số bước',
+                      route: '/report/steps',
+                    ),
+                    _iconTile(
+                      context,
+                      Icons.scale,
+                      'Cân nặng',
+                      route: '/report/weight',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+
+                Card(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Gia nhập cộng đồng ngay!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Bạn đã vào group chưa? Nơi cộng đồng sẽ đồng hành cùng bạn.',
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/community'),
+                          child: const Text('Tham gia ngay'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+
+                Text(
+                  'Tìm ứng dụng trên trang mạng xã hội',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _socialTile(context, Icons.music_note, 'Tiktok'),
+                    _socialTile(context, Icons.facebook, 'Facebook'),
+                    _socialTile(context, Icons.camera_alt, 'Instagram'),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    onPressed: () => _showLogoutDialog(context, ref),
+                    child: const Text('Đăng xuất'),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                Center(
+                  child: Text(
+                    'Calories App',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Center(
+                  child: Text(
+                    'Phiên bản: 1.0.0',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: Text(
+                    '© Calories App 2024. All Rights Reserved',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 40),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  String _formatJoinDate(DateTime dt) {
+    final d = dt.day.toString().padLeft(2, '0');
+    final m = dt.month;
+    final y = dt.year;
+    return '$d Thg $m, $y';
+  }
+
+  Widget _statChip(BuildContext context, IconData icon, String label) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 6),
+        Text(label, style: Theme.of(context).textTheme.bodyMedium),
+      ],
+    );
+  }
+
+  Widget _journeyCard(BuildContext context, Map<String, dynamic> profile) {
+    final weight = (profile['weightKg'] is num)
+        ? (profile['weightKg'] as num).toDouble()
+        : 57.0;
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile Header
-            _buildProfileHeader(user),
-            const SizedBox(height: 20),
-            
-            // Stats Cards
-            _buildStatsCards(),
-            const SizedBox(height: 20),
-            
-            // Menu Options
-            _buildMenuOptions(context, ref),
-            const SizedBox(height: 20),
+            const Text(
+              'Hành trình của bạn',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              height: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary.withAlpha(31),
+                    Theme.of(context).colorScheme.primary.withAlpha(10),
+                  ],
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.emoji_events,
+                      size: 42,
+                      color: Colors.deepPurple,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Bạn đang duy trì cân nặng rất tốt!',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Cập nhật lại cân nặng để xem tiến trình',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(height: 8),
+                    Slider.adaptive(
+                      value: weight.toDouble().clamp(30, 120),
+                      onChanged: (_) {},
+                      min: 30,
+                      max: 120,
+                    ),
+                    Center(
+                      child: Text(
+                        '${weight.toStringAsFixed(0)} kg',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildProfileHeader(User? user) {
-    final displayName = user?.displayName ?? 'Người dùng';
-    final email = user?.email ?? 'user@example.com';
-    
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFAAF0D1), Color(0xFF7FD8BE)],
-                  ),
-                  border: Border.all(color: Colors.white, width: 4),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFAAF0D1),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  child: const Icon(
-                    Icons.camera_alt,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            displayName,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            email,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              // TODO: Edit profile
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFAAF0D1),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: const Text('Chỉnh sửa hồ sơ'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatsCards() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildStatCard('Cân nặng', '0 kg', Icons.monitor_weight_outlined),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStatCard('Chiều cao', '0 cm', Icons.height_outlined),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStatCard('BMI', '0.0', Icons.favorite_outlined),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard(String label, String value, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: const Color(0xFFAAF0D1), size: 28),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuOptions(BuildContext context, WidgetRef ref) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _buildMenuItem(
-            icon: Icons.person_outlined,
-            title: 'Thông tin cá nhân',
-            onTap: () {
-              // TODO: Navigate to personal info
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.track_changes_outlined,
-            title: 'Mục tiêu của tôi',
-            onTap: () {
-              // TODO: Navigate to goals
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.history,
-            title: 'Lịch sử hoạt động',
-            onTap: () {
-              // TODO: Navigate to activity history
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.notifications_outlined,
-            title: 'Thông báo',
-            onTap: () {
-              // TODO: Navigate to notifications settings
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.lock_outlined,
-            title: 'Bảo mật',
-            onTap: () {
-              // TODO: Navigate to security settings
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.help_outlined,
-            title: 'Trợ giúp & Hỗ trợ',
-            onTap: () {
-              // TODO: Navigate to help
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.info_outlined,
-            title: 'Về ứng dụng',
-            onTap: () {
-              // TODO: Navigate to about
-            },
-          ),
-          _buildDivider(),
-          _buildMenuItem(
-            icon: Icons.logout,
-            title: 'Đăng xuất',
-            iconColor: Colors.red,
-            titleColor: Colors.red,
-            onTap: () {
-              _showLogoutDialog(context, ref);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-    Color? iconColor,
-    Color? titleColor,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: iconColor ?? const Color(0xFFAAF0D1),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          color: titleColor ?? Colors.black87,
+  Widget _macroRow(
+    BuildContext context,
+    String name,
+    String pct,
+    String grams,
+    Color color,
+  ) {
+    return Row(
+      children: [
+        Icon(Icons.circle, color: color, size: 12),
+        const SizedBox(width: 8),
+        Expanded(child: Text(name)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(pct, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('($grams)', style: Theme.of(context).textTheme.bodySmall),
+          ],
         ),
-      ),
-      trailing: Icon(
-        Icons.chevron_right,
-        color: Colors.grey[400],
-      ),
-      onTap: onTap,
+      ],
     );
   }
 
-  Widget _buildDivider() {
-    return Divider(
-      height: 1,
-      thickness: 1,
-      color: Colors.grey[200],
-      indent: 16,
-      endIndent: 16,
+  Widget _iconTile(
+    BuildContext context,
+    IconData icon,
+    String label, {
+    String? route,
+  }) {
+    final child = Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest,
+          child: Icon(icon, color: Theme.of(context).colorScheme.primary),
+        ),
+        const SizedBox(height: 8),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
+      ],
+    );
+    final content = route == null
+        ? child
+        : GestureDetector(
+            onTap: () => Navigator.pushNamed(context, route),
+            child: child,
+          );
+    return Expanded(child: content);
+  }
+
+  Widget _socialTile(BuildContext context, IconData icon, String label) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Icon(icon, color: Theme.of(context).colorScheme.primary),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ],
+      ),
     );
   }
 
@@ -340,15 +626,13 @@ class AccountPage extends ConsumerWidget {
           content: const Text('Bạn có chắc chắn muốn đăng xuất?'),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: const Text('Hủy'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(dialogContext).pop();
-                _handleSignOut(context, ref);
+                await _handleSignOut(dialogContext, ref);
               },
               child: const Text(
                 'Đăng xuất',
@@ -361,38 +645,21 @@ class AccountPage extends ConsumerWidget {
     );
   }
 
-  /// Central sign-out handler that resets state and clears navigation stack
   Future<void> _handleSignOut(BuildContext context, WidgetRef ref) async {
     try {
       final googleSignIn = GoogleSignIn();
-      
-      // Step 1: Disconnect from Google account (removes app's access)
       try {
         await googleSignIn.disconnect();
-      } catch (e) {
-        // Ignore disconnect errors (e.g., if already disconnected or not signed in with Google)
-      }
-      
-      // Step 2: Sign out from Google Sign-In
+      } catch (_) {}
       try {
         await googleSignIn.signOut();
-      } catch (e) {
-        // Ignore signOut errors (e.g., if not signed in with Google)
-      }
-      
-      // Step 3: Sign out from Firebase
+      } catch (_) {}
       await FirebaseAuth.instance.signOut();
-      
-      // Step 4: Invalidate Riverpod providers to clear state
+      // Invalidate Riverpod providers to clear app state
       ref.invalidate(currentProfileProvider);
       ref.invalidate(onboardingControllerProvider);
-      
-      // Step 5: Clear navigation stack and navigate to intro (which shows intro slides when logged out)
       if (!context.mounted) return;
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/intro',
-        (route) => false, // Remove all previous routes
-      );
+      Navigator.of(context).pushNamedAndRemoveUntil('/intro', (route) => false);
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -406,3 +673,24 @@ class AccountPage extends ConsumerWidget {
   }
 }
 
+// Components `AvatarCircle` and `MacroRing` are provided in
+// `lib/ui/components/` (copied from feature/ui-thien).
+
+// Placeholder screens used for navigation targets when real screens are not present
+class PhysicalProfileScreenPlaceholder extends StatelessWidget {
+  const PhysicalProfileScreenPlaceholder({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Hồ sơ thể chất')),
+    body: const Center(child: Text('Physical profile screen (placeholder)')),
+  );
+}
+
+class TargetsScreenPlaceholder extends StatelessWidget {
+  const TargetsScreenPlaceholder({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Mục tiêu')),
+    body: const Center(child: Text('Targets screen (placeholder)')),
+  );
+}

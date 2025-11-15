@@ -151,7 +151,7 @@ class _MealsHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withAlpha((0.05 * 255).round()),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -162,7 +162,7 @@ class _MealsHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: AppColors.mintGreen.withOpacity(0.25),
+                    color: AppColors.mintGreen.withAlpha((0.25 * 255).round()),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -334,7 +334,7 @@ class _EmptyState extends StatelessWidget {
               width: 88,
               height: 88,
               decoration: BoxDecoration(
-                color: AppColors.mintGreen.withOpacity(0.25),
+                color: AppColors.mintGreen.withAlpha((0.25 * 255).round()),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -361,4 +361,5 @@ class _EmptyState extends StatelessWidget {
     );
   }
 }
+
 

@@ -31,7 +31,7 @@ class AppTheme {
         onSurface: AppColors.nearBlack,
         onError: AppColors.white,
         outline: AppColors.charmingGreen,
-        outlineVariant: AppColors.charmingGreen.withOpacity(0.5),
+        outlineVariant: AppColors.charmingGreen.withAlpha((0.5 * 255).round()),
       ),
 
       // Scaffold
@@ -157,7 +157,7 @@ class AppTheme {
           fontSize: 14,
         ),
         hintStyle: TextStyle(
-          color: AppColors.mediumGray.withOpacity(0.6),
+          color: AppColors.mediumGray.withAlpha((0.6 * 255).round()),
           fontSize: 14,
         ),
       ),
@@ -258,7 +258,7 @@ class AppTheme {
 
       // Chip
       chipTheme: ChipThemeData(
-        backgroundColor: AppColors.charmingGreen.withOpacity(0.3),
+        backgroundColor: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
         selectedColor: AppColors.mintGreen,
         labelStyle: const TextStyle(
           color: AppColors.nearBlack,
@@ -327,9 +327,9 @@ class AppTheme {
         trackColor: WidgetStateProperty.resolveWith<Color?>(
           (Set<WidgetState> states) {
             if (states.contains(WidgetState.selected)) {
-              return AppColors.mintGreen.withOpacity(0.5);
+              return AppColors.mintGreen.withAlpha((0.5 * 255).round());
             }
-            return AppColors.charmingGreen.withOpacity(0.3);
+            return AppColors.charmingGreen.withAlpha((0.3 * 255).round());
           },
         ),
       ),
@@ -337,9 +337,9 @@ class AppTheme {
       // Slider
       sliderTheme: SliderThemeData(
         activeTrackColor: AppColors.mintGreen,
-        inactiveTrackColor: AppColors.charmingGreen.withOpacity(0.3),
+        inactiveTrackColor: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
         thumbColor: AppColors.mintGreen,
-        overlayColor: AppColors.mintGreen.withOpacity(0.2),
+        overlayColor: AppColors.mintGreen.withAlpha((0.2 * 255).round()),
       ),
 
       // Page Transitions
@@ -370,4 +370,5 @@ class AppTheme {
     );
   }
 }
+
 

@@ -153,7 +153,7 @@ class _GenderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final gradient = LinearGradient(
       colors: [
-        AppColors.mintGreen.withOpacity(0.9),
+        AppColors.mintGreen.withAlpha((0.9 * 255).round()),
         AppColors.mintGreen,
       ],
       begin: Alignment.topLeft,
@@ -175,7 +175,7 @@ class _GenderCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isSelected ? 0.12 : 0.05),
+            color: Colors.black.withAlpha((isSelected ? 0.12 : 0.05 * 255).round()),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -214,4 +214,5 @@ class _GenderCard extends StatelessWidget {
     );
   }
 }
+
 

@@ -99,7 +99,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       Container(
                         padding: const EdgeInsets.all(AuthTheme.spacingLarge),
                         decoration: BoxDecoration(
-                          color: AuthTheme.mintGreen.withOpacity(0.2),
+                          color: AuthTheme.mintGreen.withAlpha((0.2 * 255).round()),
                           borderRadius: BorderRadius.circular(
                             AuthTheme.borderRadius,
                           ),
@@ -225,7 +225,7 @@ class _CustomTextField extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: AuthTheme.bodyStyle.copyWith(
-                color: AuthTheme.mediumGray.withOpacity(0.6),
+                color: AuthTheme.mediumGray.withAlpha((0.6 * 255).round()),
               ),
               prefixIcon: Icon(prefixIcon, color: AuthTheme.mintGreen),
               border: OutlineInputBorder(
@@ -304,4 +304,5 @@ class _PrimaryButton extends StatelessWidget {
     );
   }
 }
+
 

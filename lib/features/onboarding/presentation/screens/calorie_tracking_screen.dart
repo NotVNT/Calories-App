@@ -15,7 +15,7 @@ class CalorieTrackingScreen extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             OnboardingTheme.backgroundColor,
-            OnboardingTheme.backgroundColor.withOpacity(0.8),
+            OnboardingTheme.backgroundColor.withAlpha((0.8 * 255).round()),
           ],
         ),
       ),
@@ -41,7 +41,7 @@ class CalorieTrackingScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: OnboardingTheme.secondaryColor.withOpacity(0.3),
+                          color: OnboardingTheme.secondaryColor.withAlpha((0.3 * 255).round()),
                           shape: BoxShape.circle,
                         ),
                         child: const MascotLaptopWidget(size: 200),
@@ -84,5 +84,6 @@ class CalorieTrackingScreen extends StatelessWidget {
     );
   }
 }
+
 
 

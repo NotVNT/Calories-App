@@ -14,7 +14,7 @@ class IntroScreen extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             OnboardingTheme.backgroundColor,
-            OnboardingTheme.backgroundColor.withOpacity(0.8),
+            OnboardingTheme.backgroundColor.withAlpha((0.8 * 255).round()),
           ],
         ),
       ),
@@ -42,7 +42,7 @@ class IntroScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: OnboardingTheme.primaryColor.withOpacity(0.3),
+                          color: OnboardingTheme.primaryColor.withAlpha((0.3 * 255).round()),
                           blurRadius: 40,
                           spreadRadius: 10,
                         ),
@@ -66,7 +66,7 @@ class IntroScreen extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withAlpha((0.2 * 255).round()),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -106,5 +106,6 @@ class IntroScreen extends StatelessWidget {
     );
   }
 }
+
 
 

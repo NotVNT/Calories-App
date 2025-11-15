@@ -34,7 +34,7 @@ class _MascotPainter extends CustomPainter {
     final strokePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
-      ..color = Colors.white.withOpacity(0.3);
+      ..color = Colors.white.withAlpha((0.3 * 255).round());
 
     final centerX = size.width / 2;
     final centerY = size.height / 2;
@@ -162,5 +162,6 @@ class _MascotPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
 
 

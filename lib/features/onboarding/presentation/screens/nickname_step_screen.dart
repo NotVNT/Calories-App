@@ -147,11 +147,11 @@ class _NicknameStepScreenState extends ConsumerState<NicknameStepScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
                   decoration: BoxDecoration(
-                    color: AppColors.charmingGreen.withOpacity(0.5),
+                    color: AppColors.charmingGreen.withAlpha((0.5 * 255).round()),
                     borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withAlpha((0.05 * 255).round()),
                         blurRadius: 16,
                         offset: const Offset(0, 8),
                       ),
@@ -197,7 +197,7 @@ class _NicknameStepScreenState extends ConsumerState<NicknameStepScreen> {
                           hintStyle: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.nearBlack.withOpacity(0.4),
+                            color: AppColors.nearBlack.withAlpha((0.4 * 255).round()),
                           ),
                         ),
                       ),
@@ -205,7 +205,7 @@ class _NicknameStepScreenState extends ConsumerState<NicknameStepScreen> {
                       Text(
                         '1-24 ký tự, không dùng toàn emoji. Bạn có thể thay đổi sau.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.nearBlack.withOpacity(0.7),
+                              color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                             ),
                       ),
                       if (_errorText != null) ...[
@@ -255,4 +255,5 @@ class _NicknameStepScreenState extends ConsumerState<NicknameStepScreen> {
     );
   }
 }
+
 

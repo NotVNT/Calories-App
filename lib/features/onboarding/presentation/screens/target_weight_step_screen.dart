@@ -323,7 +323,7 @@ class _TargetWeightStepScreenState extends ConsumerState<TargetWeightStepScreen>
                           vertical: 24,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.charmingGreen.withOpacity(0.3),
+                          color: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                         ),
                         child: Column(
@@ -359,10 +359,10 @@ class _TargetWeightStepScreenState extends ConsumerState<TargetWeightStepScreen>
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppColors.error.withOpacity(0.1),
+                          color: AppColors.error.withAlpha((0.1 * 255).round()),
                           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                           border: Border.all(
-                            color: AppColors.error.withOpacity(0.3),
+                            color: AppColors.error.withAlpha((0.3 * 255).round()),
                             width: 1,
                           ),
                         ),
@@ -398,12 +398,12 @@ class _TargetWeightStepScreenState extends ConsumerState<TargetWeightStepScreen>
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                           border: Border.all(
-                            color: _getBMIColor(targetBMI).withOpacity(0.3),
+                            color: _getBMIColor(targetBMI).withAlpha((0.3 * 255).round()),
                             width: 2,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withAlpha((0.05 * 255).round()),
                               blurRadius: 16,
                               offset: const Offset(0, 8),
                             ),
@@ -437,7 +437,7 @@ class _TargetWeightStepScreenState extends ConsumerState<TargetWeightStepScreen>
                                 vertical: 8,
                               ),
                               decoration: BoxDecoration(
-                                color: _getBMIColor(targetBMI).withOpacity(0.2),
+                                color: _getBMIColor(targetBMI).withAlpha((0.2 * 255).round()),
                                 borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                                 border: Border.all(
                                   color: _getBMIColor(targetBMI),
@@ -468,7 +468,7 @@ class _TargetWeightStepScreenState extends ConsumerState<TargetWeightStepScreen>
                           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withAlpha((0.05 * 255).round()),
                               blurRadius: 16,
                               offset: const Offset(0, 8),
                             ),
@@ -575,4 +575,5 @@ class _WeightPickerWidget extends StatelessWidget {
     );
   }
 }
+
 

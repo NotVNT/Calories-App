@@ -113,7 +113,7 @@ class _WeightRulerWidgetState extends State<WeightRulerWidget> {
             child: Container(
               height: _itemHeight,
               decoration: BoxDecoration(
-                color: AppColors.mintGreen.withOpacity(0.15),
+                color: AppColors.mintGreen.withAlpha((0.15 * 255).round()),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                 border: Border.symmetric(
                   horizontal: BorderSide(
@@ -146,7 +146,7 @@ class _WeightRulerWidgetState extends State<WeightRulerWidget> {
             height: isMajorTick ? 2 : 1,
             color: isSelected
                 ? AppColors.mintGreen
-                : AppColors.charmingGreen.withOpacity(0.5),
+                : AppColors.charmingGreen.withAlpha((0.5 * 255).round()),
           ),
           const SizedBox(width: 16),
           
@@ -180,4 +180,5 @@ class _WeightRulerWidgetState extends State<WeightRulerWidget> {
     );
   }
 }
+
 

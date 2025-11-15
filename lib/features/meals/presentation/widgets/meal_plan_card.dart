@@ -21,12 +21,12 @@ class MealPlanCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).round()),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: plan.accent.withOpacity(0.25)),
+        border: Border.all(color: plan.accent.withAlpha((0.25 * 255).round())),
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -68,7 +68,7 @@ class MealPlanCard extends StatelessWidget {
                 .map(
                   (tag) => Chip(
                     label: Text(tag),
-                    backgroundColor: plan.accent.withOpacity(0.18),
+                    backgroundColor: plan.accent.withAlpha((0.18 * 255).round()),
                     labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: AppColors.nearBlack,
                           fontWeight: FontWeight.w600,
@@ -172,7 +172,7 @@ class _PlanBadge extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.4),
+            color: color.withAlpha((0.4 * 255).round()),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -204,7 +204,7 @@ class _MacroStat extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: color.withAlpha((0.12 * 255).round()),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
@@ -246,7 +246,7 @@ class _InfoPill extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColors.charmingGreen.withOpacity(0.25),
+          color: AppColors.charmingGreen.withAlpha((0.25 * 255).round()),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -274,4 +274,5 @@ class _InfoPill extends StatelessWidget {
     );
   }
 }
+
 

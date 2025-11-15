@@ -216,8 +216,8 @@ class _CalculationStepRowState extends State<_CalculationStepRow>
               color: widget.isCompleted
                   ? AppColors.mintGreen
                   : widget.isCurrent
-                      ? AppColors.mintGreen.withOpacity(0.3)
-                      : AppColors.charmingGreen.withOpacity(0.3),
+                      ? AppColors.mintGreen.withAlpha((0.3 * 255).round())
+                      : AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
             ),
             child: widget.isCompleted
                 ? const Icon(
@@ -259,4 +259,5 @@ class _CalculationStepRowState extends State<_CalculationStepRow>
     );
   }
 }
+
 

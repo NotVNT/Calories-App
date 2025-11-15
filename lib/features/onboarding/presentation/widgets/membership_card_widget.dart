@@ -24,7 +24,7 @@ class MembershipCardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: OnboardingTheme.primaryColor.withOpacity(0.3),
+              color: OnboardingTheme.primaryColor.withAlpha((0.3 * 255).round()),
               blurRadius: 20,
               spreadRadius: 5,
               offset: const Offset(0, 10),
@@ -128,4 +128,5 @@ class MembershipCardWidget extends StatelessWidget {
     );
   }
 }
+
 

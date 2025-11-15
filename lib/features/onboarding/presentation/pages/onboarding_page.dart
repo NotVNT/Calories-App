@@ -83,7 +83,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    OnboardingTheme.backgroundColor.withOpacity(0),
+                    OnboardingTheme.backgroundColor.withAlpha((0 * 255).round()),
                     OnboardingTheme.backgroundColor,
                   ],
                 ),
@@ -96,7 +96,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     count: _screens.length,
                     effect: ExpandingDotsEffect(
                       activeDotColor: OnboardingTheme.primaryColor,
-                      dotColor: OnboardingTheme.secondaryColor.withOpacity(0.5),
+                      dotColor: OnboardingTheme.secondaryColor.withAlpha((0.5 * 255).round()),
                       dotHeight: 8,
                       dotWidth: 8,
                       expansionFactor: 3,
@@ -134,5 +134,6 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     );
   }
 }
+
 
 

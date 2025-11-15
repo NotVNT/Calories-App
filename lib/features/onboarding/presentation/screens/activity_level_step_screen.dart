@@ -238,7 +238,7 @@ class _ActivityLevelCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final gradient = LinearGradient(
       colors: [
-        AppColors.mintGreen.withOpacity(0.9),
+        AppColors.mintGreen.withAlpha((0.9 * 255).round()),
         AppColors.mintGreen,
       ],
       begin: Alignment.topLeft,
@@ -260,7 +260,7 @@ class _ActivityLevelCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isSelected ? 0.12 : 0.05),
+            color: Colors.black.withAlpha((isSelected ? 0.12 : 0.05 * 255).round()),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -284,8 +284,8 @@ class _ActivityLevelCard extends StatelessWidget {
                       height: 48,
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.mintGreen.withOpacity(0.2)
-                            : AppColors.charmingGreen.withOpacity(0.1),
+                            ? AppColors.mintGreen.withAlpha((0.2 * 255).round())
+                            : AppColors.charmingGreen.withAlpha((0.1 * 255).round()),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -317,7 +317,7 @@ class _ActivityLevelCard extends StatelessWidget {
                             data.description,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: isSelected
-                                      ? AppColors.nearBlack.withOpacity(0.8)
+                                      ? AppColors.nearBlack.withAlpha((0.8 * 255).round())
                                       : AppColors.mediumGray,
                                 ),
                           ),
@@ -354,8 +354,8 @@ class _ActivityLevelCard extends StatelessWidget {
                     children: [
                       Divider(
                         color: isSelected
-                            ? AppColors.nearBlack.withOpacity(0.2)
-                            : AppColors.charmingGreen.withOpacity(0.3),
+                            ? AppColors.nearBlack.withAlpha((0.2 * 255).round())
+                            : AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
                       ),
                       const SizedBox(height: 16),
                       
@@ -388,7 +388,7 @@ class _ActivityLevelCard extends StatelessWidget {
                         'Ví dụ nghề nghiệp:',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: isSelected
-                                  ? AppColors.nearBlack.withOpacity(0.7)
+                                  ? AppColors.nearBlack.withAlpha((0.7 * 255).round())
                                   : AppColors.mediumGray,
                               fontWeight: FontWeight.w600,
                             ),
@@ -405,8 +405,8 @@ class _ActivityLevelCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? AppColors.nearBlack.withOpacity(0.1)
-                                  : AppColors.charmingGreen.withOpacity(0.2),
+                                  ? AppColors.nearBlack.withAlpha((0.1 * 255).round())
+                                  : AppColors.charmingGreen.withAlpha((0.2 * 255).round()),
                               borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                             ),
                             child: Text(
@@ -430,4 +430,5 @@ class _ActivityLevelCard extends StatelessWidget {
     );
   }
 }
+
 

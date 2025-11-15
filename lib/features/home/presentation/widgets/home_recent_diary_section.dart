@@ -61,7 +61,7 @@ class _DiaryEmptyState extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.charmingGreen.withOpacity(0.4)),
+        border: Border.all(color: AppColors.charmingGreen.withAlpha((0.4 * 255).round())),
       ),
       child: Column(
         children: [
@@ -123,7 +123,7 @@ class _RecentDiaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withAlpha((0.06 * 255).round()),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -139,7 +139,7 @@ class _RecentDiaryCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.mintGreen.withOpacity(0.25),
+                  color: AppColors.mintGreen.withAlpha((0.25 * 255).round()),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -199,4 +199,5 @@ class _RecentDiaryCard extends StatelessWidget {
     );
   }
 }
+
 

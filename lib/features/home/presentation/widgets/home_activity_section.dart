@@ -15,9 +15,9 @@ class HomeActivitySection extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.nearBlack.withOpacity(0.04),
+        color: AppColors.nearBlack.withAlpha((0.04 * 255).round()),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.charmingGreen.withOpacity(0.4)),
+        border: Border.all(color: AppColors.charmingGreen.withAlpha((0.4 * 255).round())),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +56,7 @@ class HomeActivitySection extends ConsumerWidget {
                       // TODO: Handle quick logging for activity.
                     },
                     backgroundColor: Colors.white,
-                    selectedColor: AppColors.mintGreen.withOpacity(0.9),
+                    selectedColor: AppColors.mintGreen.withAlpha((0.9 * 255).round()),
                     labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -114,7 +114,7 @@ class _StepsCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withAlpha((0.08 * 255).round()),
             blurRadius: 15,
             offset: const Offset(0, 6),
           ),
@@ -236,4 +236,5 @@ class _WorkoutCard extends ConsumerWidget {
     );
   }
 }
+
 

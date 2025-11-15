@@ -166,7 +166,7 @@ class _GoalTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final gradient = LinearGradient(
       colors: [
-        AppColors.mintGreen.withOpacity(0.9),
+        AppColors.mintGreen.withAlpha((0.9 * 255).round()),
         AppColors.mintGreen,
       ],
       begin: Alignment.topLeft,
@@ -188,7 +188,7 @@ class _GoalTypeCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isSelected ? 0.12 : 0.05),
+            color: Colors.black.withAlpha((isSelected ? 0.12 : 0.05 * 255).round()),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -208,8 +208,8 @@ class _GoalTypeCard extends StatelessWidget {
                   height: 56,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.nearBlack.withOpacity(0.2)
-                        : AppColors.mintGreen.withOpacity(0.2),
+                        ? AppColors.nearBlack.withAlpha((0.2 * 255).round())
+                        : AppColors.mintGreen.withAlpha((0.2 * 255).round()),
                     borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   ),
                   child: Icon(
@@ -239,7 +239,7 @@ class _GoalTypeCard extends StatelessWidget {
                         description,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: isSelected
-                                  ? AppColors.nearBlack.withOpacity(0.8)
+                                  ? AppColors.nearBlack.withAlpha((0.8 * 255).round())
                                   : AppColors.mediumGray,
                             ),
                       ),
@@ -260,4 +260,5 @@ class _GoalTypeCard extends StatelessWidget {
     );
   }
 }
+
 

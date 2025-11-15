@@ -1,0 +1,362 @@
+import 'package:flutter/material.dart';
+
+class WeightPickerScreen extends StatefulWidget {
+  const WeightPickerScreen({super.key});
+
+  @override
+  State<WeightPickerScreen> createState() => _WeightPickerScreenState();
+}
+
+class _WeightPickerScreenState extends State<WeightPickerScreen> {
+  double _weight = 57.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
+    final goalTitle = args['goalTitle'] as String? ?? '';
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0, iconTheme: IconThemeData(color: theme.colorScheme.onSurface)),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            LinearProgressIndicator(value: 0.5, color: theme.colorScheme.primary, backgroundColor: theme.colorScheme.onSurface.withAlpha(24)),
+            const SizedBox(height: 18),
+            Align(alignment: Alignment.centerLeft, child: Text('Cân nặng hiện tại của bạn', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold))),
+            const SizedBox(height: 24),
+import 'package:flutter/material.dart';
+
+class WeightPickerScreen extends StatefulWidget {
+  const WeightPickerScreen({super.key});
+
+  @override
+  State<WeightPickerScreen> createState() => _WeightPickerScreenState();
+}
+
+class _WeightPickerScreenState extends State<WeightPickerScreen> {
+  double _weight = 57.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
+    final goalTitle = args['goalTitle'] as String? ?? '';
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0, iconTheme: IconThemeData(color: theme.colorScheme.onSurface)),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            LinearProgressIndicator(value: 0.5, color: theme.colorScheme.primary, backgroundColor: theme.colorScheme.onSurface.withAlpha(24)),
+            const SizedBox(height: 18),
+            Align(alignment: Alignment.centerLeft, child: Text('Cân nặng hiện tại của bạn', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold))),
+            const SizedBox(height: 24),
+
+            // Illustration placeholder above the ruler — asset if provided
+            SizedBox(
+              height: 140,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/setup_weight.png',
+                  fit: BoxFit.cover,
+                  errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(_weight.toStringAsFixed(1), style: theme.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 6),
+                  Text('kg', style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 24),
+
+                  // Simple ruler using Slider and tick marks
+                  SizedBox(
+                    height: 80,
+                    child: Column(
+                      children: [
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 2,
+                            activeTrackColor: theme.colorScheme.primary,
+                            inactiveTrackColor: theme.colorScheme.onSurface.withAlpha(24),
+                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                          ),
+                          child: Slider(
+                            value: _weight,
+                            min: 30,
+                            max: 150,
+                            divisions: 240,
+                            label: _weight.toStringAsFixed(1),
+                            onChanged: (v) => setState(() => _weight = v),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: const [Text('30'), Text('90'), Text('150')])
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 18),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('BMI của bạn: 22.3', style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 6),
+                              Text('Bạn đang ở mức cân nặng hợp lý. Hãy duy trì thói quen lành mạnh để bảo vệ sức khỏe lâu dài.', style: theme.textTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            import 'package:flutter/material.dart';
+
+            class WeightPickerScreen extends StatefulWidget {
+              const WeightPickerScreen({super.key});
+
+              @override
+              State<WeightPickerScreen> createState() => _WeightPickerScreenState();
+            }
+
+            class _WeightPickerScreenState extends State<WeightPickerScreen> {
+              double _weight = 57.0;
+
+              @override
+              Widget build(BuildContext context) {
+                final theme = Theme.of(context);
+                final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
+                final goalTitle = args['goalTitle'] as String? ?? '';
+
+                return Scaffold(
+                  backgroundColor: theme.colorScheme.surface,
+                  appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0, iconTheme: IconThemeData(color: theme.colorScheme.onSurface)),
+                  body: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        LinearProgressIndicator(value: 0.5, color: theme.colorScheme.primary, backgroundColor: theme.colorScheme.onSurface.withAlpha(24)),
+                        const SizedBox(height: 18),
+                        Align(alignment: Alignment.centerLeft, child: Text('Cân nặng hiện tại của bạn', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold))),
+                        const SizedBox(height: 24),
+
+                        // Illustration placeholder above the ruler — asset if provided
+                        SizedBox(
+                          height: 140,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              'assets/images/setup_weight.png',
+                              fit: BoxFit.cover,
+                              errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(_weight.toStringAsFixed(1), style: theme.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 6),
+                              Text('kg', style: theme.textTheme.titleMedium),
+                              const SizedBox(height: 24),
+
+                              // Simple ruler using Slider and tick marks
+                              SizedBox(
+                                height: 80,
+                                child: Column(
+                                  children: [
+                                    SliderTheme(
+                                      data: SliderTheme.of(context).copyWith(
+                                        trackHeight: 2,
+                                        activeTrackColor: theme.colorScheme.primary,
+                                        inactiveTrackColor: theme.colorScheme.onSurface.withAlpha(24),
+                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                                      ),
+                                      child: Slider(
+                                        value: _weight,
+                                        min: 30,
+                                        max: 150,
+                                        divisions: 240,
+                                        label: _weight.toStringAsFixed(1),
+                                        onChanged: (v) => setState(() => _weight = v),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: const [Text('30'), Text('90'), Text('150')])
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(height: 18),
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(12)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('BMI của bạn: 22.3', style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 6),
+                                          Text('Bạn đang ở mức cân nặng hợp lý. Hãy duy trì thói quen lành mạnh để bảo vệ sức khỏe lâu dài.', style: theme.textTheme.bodySmall),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        import 'package:flutter/material.dart';
+
+                        class WeightPickerScreen extends StatefulWidget {
+                          const WeightPickerScreen({super.key});
+
+                          @override
+                          State<WeightPickerScreen> createState() => _WeightPickerScreenState();
+                        }
+
+                        class _WeightPickerScreenState extends State<WeightPickerScreen> {
+                          double _weight = 57.0;
+
+                          @override
+                          Widget build(BuildContext context) {
+                            final theme = Theme.of(context);
+                            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
+                            final goalTitle = args['goalTitle'] as String? ?? '';
+
+                            return Scaffold(
+                              backgroundColor: theme.colorScheme.surface,
+                              appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0, iconTheme: IconThemeData(color: theme.colorScheme.onSurface)),
+                              body: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    LinearProgressIndicator(value: 0.5, color: theme.colorScheme.primary, backgroundColor: theme.colorScheme.onSurface.withAlpha(24)),
+                                    const SizedBox(height: 18),
+                                    Align(alignment: Alignment.centerLeft, child: Text('Cân nặng hiện tại của bạn', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold))),
+                                    const SizedBox(height: 24),
+
+                                    // Illustration placeholder above the ruler — asset if provided
+                                    SizedBox(
+                                      height: 140,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.asset(
+                                          'assets/images/setup_weight.png',
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 12),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(_weight.toStringAsFixed(1), style: theme.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 6),
+                                          Text('kg', style: theme.textTheme.titleMedium),
+                                          const SizedBox(height: 24),
+
+                                          // Simple ruler using Slider and tick marks
+                                          SizedBox(
+                                            height: 80,
+                                            child: Column(
+                                              children: [
+                                                SliderTheme(
+                                                  data: SliderTheme.of(context).copyWith(
+                                                    trackHeight: 2,
+                                                    activeTrackColor: theme.colorScheme.primary,
+                                                    inactiveTrackColor: theme.colorScheme.onSurface.withAlpha(24),
+                                                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                                                  ),
+                                                  child: Slider(
+                                                    value: _weight,
+                                                    min: 30,
+                                                    max: 150,
+                                                    divisions: 240,
+                                                    label: _weight.toStringAsFixed(1),
+                                                    onChanged: (v) => setState(() => _weight = v),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: const [Text('30'), Text('90'), Text('150')])
+                                              ],
+                                            ),
+                                          ),
+
+                                          const SizedBox(height: 18),
+                                          Container(
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(12)),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('BMI của bạn: 22.3', style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                                                      const SizedBox(height: 6),
+                                                      Text('Bạn đang ở mức cân nặng hợp lý. Hãy duy trì thói quen lành mạnh để bảo vệ sức khỏe lâu dài.', style: theme.textTheme.bodySmall),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SafeArea(
+                                      top: false,
+                                      child: Row(
+                                        children: [
+                                          Expanded(child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Quay lại'))),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pushNamed('/setup_goal/activity', arguments: {'goalTitle': goalTitle, 'weight': _weight});
+                                              },
+                                              child: const Text('Tiếp tục'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }

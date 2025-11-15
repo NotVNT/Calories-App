@@ -26,7 +26,7 @@ class MealCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).round()),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -45,7 +45,7 @@ class MealCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: meal.type.color.withOpacity(0.2),
+                      color: meal.type.color.withAlpha((0.2 * 255).round()),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
@@ -180,7 +180,7 @@ class MealCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withAlpha((0.1 * 255).round()),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -218,4 +218,5 @@ class MealCard extends StatelessWidget {
     );
   }
 }
+
 

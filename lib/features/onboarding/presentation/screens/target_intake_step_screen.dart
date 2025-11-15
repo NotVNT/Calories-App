@@ -396,7 +396,7 @@ class _KcalBox extends StatelessWidget {
                 Text(
                   label,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: AppColors.nearBlack.withOpacity(0.7),
+                        color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                         fontWeight: FontWeight.w500,
                       ),
                 ),
@@ -415,7 +415,7 @@ class _KcalBox extends StatelessWidget {
             Text(
               'kcal',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.nearBlack.withOpacity(0.7),
+                    color: AppColors.nearBlack.withAlpha((0.7 * 255).round()),
                   ),
             ),
           ],
@@ -448,7 +448,7 @@ class _BreakdownCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         side: BorderSide(
-          color: AppColors.charmingGreen.withOpacity(0.3),
+          color: AppColors.charmingGreen.withAlpha((0.3 * 255).round()),
           width: 1,
         ),
       ),
@@ -475,7 +475,7 @@ class _BreakdownCard extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
+                    color: color.withAlpha((0.2 * 255).round()),
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
                   child: Text(
@@ -501,4 +501,5 @@ class _BreakdownCard extends StatelessWidget {
     );
   }
 }
+
 

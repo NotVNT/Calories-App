@@ -14,7 +14,7 @@ class CommunityScreen extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             OnboardingTheme.backgroundColor,
-            OnboardingTheme.backgroundColor.withOpacity(0.8),
+            OnboardingTheme.backgroundColor.withAlpha((0.8 * 255).round()),
           ],
         ),
       ),
@@ -53,5 +53,6 @@ class CommunityScreen extends StatelessWidget {
     );
   }
 }
+
 
 
