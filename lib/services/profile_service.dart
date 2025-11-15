@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // Storage is accessed via FirebaseService.storage; explicit import not required here.
 import '../models/profile.dart';
@@ -156,6 +158,97 @@ class ProfileService {
     } catch (e) {
       debugPrint('Failed to delete avatar storage: $e');
       // Non-fatal — just log and continue
+    }
+
+    // Attempt to delete the authenticated Firebase user. Deleting a
+    // FirebaseAuth user may require recent authentication and will throw a
+    // `FirebaseAuthException` with code `requires-recent-login` in that case.
+    // We surface that exception to callers so the UI can prompt the user to
+    // re-authenticate. Only sign out when deletion succeeded.
+    try {
+      final auth = FirebaseService.auth;
+      final user = auth.currentUser;
+      var userDeleted = false;
+      if (user != null) {
+        try {
+          await user.delete();
+          userDeleted = true;
+          debugPrint('FirebaseAuth user deleted for uid=${user.uid}');
+        } on FirebaseAuthException catch (e) {
+          // If recent login is required, rethrow so UI can handle reauthentication.
+          if (e.code == 'requires-recent-login') {
+            debugPrint('User deletion requires recent login: ${e.message}');
+            rethrow;
+          }
+          debugPrint('Failed to delete FirebaseAuth user: $e');
+        } catch (e) {
+          debugPrint('Failed to delete FirebaseAuth user: $e');
+        }
+
+        if (userDeleted) {
+          try {
+            await auth.signOut();
+            debugPrint('Signed out after account deletion');
+          } catch (e) {
+            debugPrint('Failed to sign out after delete: $e');
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Auth cleanup skipped: $e');
+    }
+  }
+
+  /// Re-authenticate the currently signed in user using their email and the
+  /// provided password. This is useful when Firebase requires a recent login
+  /// before performing sensitive operations (like deleting the user).
+  Future<void> reauthenticateCurrentUser(String password) async {
+    try {
+      final auth = FirebaseService.auth;
+      final user = auth.currentUser;
+      if (user == null) throw StateError('No authenticated user');
+      final email = user.email;
+      if (email == null) throw StateError('Current user has no email');
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      debugPrint('User re-authenticated for uid=${user.uid}');
+    } catch (e) {
+      debugPrint('Reauthentication failed: $e');
+      rethrow;
+    }
+  }
+
+  /// Re-authenticate the current user using Google Sign-In. This will perform
+  /// a Google sign-in flow and reauthenticate the currently-signed in Firebase
+  /// user with the obtained Google credential.
+  Future<void> reauthenticateWithGoogle() async {
+    try {
+      final auth = FirebaseService.auth;
+      final user = auth.currentUser;
+      if (user == null) throw StateError('No authenticated user');
+
+      final googleSignIn = GoogleSignIn();
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        throw StateError('Google sign-in cancelled');
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      debugPrint('User re-authenticated with Google for uid=${user.uid}');
+    } catch (e) {
+      debugPrint('Google reauthentication failed: $e');
+      rethrow;
     }
   }
 

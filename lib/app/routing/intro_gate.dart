@@ -23,8 +23,10 @@ class IntroGate extends ConsumerWidget {
         return authAsync.when(
           data: (user) {
             if (user == null) {
-              // User is not logged in → show intro first launch, otherwise auth page
-              return hasSeenIntro ? const AuthPage() : const OnboardingPage();
+              // User is not logged in → show AuthPage first.
+              // Onboarding is available but should not block login; keep
+              // onboarding optional so the user can sign in immediately.
+              return const AuthPage();
             }
 
             // User is logged in → check onboarding status via ProfileGate
@@ -33,8 +35,8 @@ class IntroGate extends ConsumerWidget {
           loading: () => const _LoadingScreen(),
           error: (error, stack) {
             debugPrint('[IntroGate] authStateProvider error: $error');
-            // On auth errors, fallback to AuthPage or intro.
-            return hasSeenIntro ? const AuthPage() : const OnboardingPage();
+            // On auth errors, fallback to AuthPage so user can try to sign in.
+            return const AuthPage();
           },
         );
       },
@@ -53,11 +55,6 @@ class _LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
-

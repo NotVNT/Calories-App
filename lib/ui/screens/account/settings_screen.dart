@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../providers/profile_provider.dart';
+import '../../components/reauth_dialog.dart';
 import 'change_password_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -165,13 +167,58 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     );
                     if (confirmed == true) {
-                      await provider.deleteAccount();
-                      messenger.showSnackBar(
-                        const SnackBar(
-                          content: Text('Tài khoản đã được xoá (local).'),
-                        ),
-                      );
-                      navigator.pushReplacementNamed('/login');
+                      try {
+                        await provider.deleteAccount();
+                        messenger.showSnackBar(
+                          const SnackBar(
+                            content: Text('Tài khoản đã được xoá.'),
+                          ),
+                        );
+                        navigator.pushNamedAndRemoveUntil(
+                          '/login',
+                          (r) => false,
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'requires-recent-login') {
+                          // Our ReauthDialog will perform reauthentication (password
+                          // or Google) and delete the account when confirmed. It
+                          // returns true on success, false/ null when cancelled or
+                          // failed.
+                          if (!navigator.mounted) return;
+                          final didDelete = await showDialog<bool?>(
+                            context: navigator.context,
+                            builder: (_) => const ReauthDialog(),
+                          );
+
+                          if (didDelete == true) {
+                            messenger.showSnackBar(
+                              const SnackBar(
+                                content: Text('Tài khoản đã được xoá.'),
+                              ),
+                            );
+                            navigator.pushNamedAndRemoveUntil(
+                              '/login',
+                              (r) => false,
+                            );
+                          } else if (didDelete == false) {
+                            messenger.showSnackBar(
+                              const SnackBar(content: Text('Đã huỷ xác thực.')),
+                            );
+                          }
+                        } else {
+                          messenger.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Không thể xoá tài khoản: ${e.message ?? e.toString()}',
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text('Lỗi: ${e.toString()}')),
+                        );
+                      }
                     }
                   },
                 ),

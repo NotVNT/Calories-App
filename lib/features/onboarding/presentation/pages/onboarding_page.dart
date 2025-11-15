@@ -60,6 +60,26 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     return Scaffold(
       body: Stack(
         children: [
+          // Top-right skip button
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 12,
+            right: 16,
+            child: SafeArea(
+              child: TextButton(
+                onPressed: () async {
+                  final navigator = Navigator.of(context);
+                  try {
+                    await ref.read(introStatusProvider.notifier).markAsSeen();
+                  } catch (e) {
+                    debugPrint('Failed to persist intro flag on skip: $e');
+                  }
+                  if (!navigator.mounted) return;
+                  navigator.pushNamedAndRemoveUntil('/login', (r) => false);
+                },
+                child: const Text('Bỏ qua'),
+              ),
+            ),
+          ),
           // PageView for screens
           PageView.builder(
             controller: _pageController,
@@ -77,13 +97,18 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 30),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 30,
+              ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    OnboardingTheme.backgroundColor.withAlpha((0 * 255).round()),
+                    OnboardingTheme.backgroundColor.withAlpha(
+                      (0 * 255).round(),
+                    ),
                     OnboardingTheme.backgroundColor,
                   ],
                 ),
@@ -96,7 +121,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     count: _screens.length,
                     effect: ExpandingDotsEffect(
                       activeDotColor: OnboardingTheme.primaryColor,
-                      dotColor: OnboardingTheme.secondaryColor.withAlpha((0.5 * 255).round()),
+                      dotColor: OnboardingTheme.secondaryColor.withAlpha(
+                        (0.5 * 255).round(),
+                      ),
                       dotHeight: 8,
                       dotWidth: 8,
                       expansionFactor: 3,
@@ -134,6 +161,3 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     );
   }
 }
-
-
-

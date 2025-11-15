@@ -66,9 +66,49 @@ class ProfileProvider extends ChangeNotifier {
       await _service.deleteAccount(uid);
     } catch (e) {
       debugPrint('deleteAccount failed: $e');
+      rethrow;
     }
     _profile = const Profile(name: 'Người dùng');
     notifyListeners();
+  }
+
+  /// Reauthenticate the current user with the provided password and then
+  /// attempt to delete the account. This surfaces auth errors to callers so
+  /// the UI can react accordingly.
+  Future<void> reauthenticateAndDelete(String password) async {
+    try {
+      await _service.reauthenticateCurrentUser(password);
+      await _service.deleteAccount(uid);
+    } catch (e) {
+      debugPrint('reauthenticateAndDelete failed: $e');
+      rethrow;
+    }
+    _profile = const Profile(name: 'Người dùng');
+    notifyListeners();
+  }
+
+  /// Reauthenticate the current user via Google Sign-In and then delete the account.
+  Future<void> reauthenticateWithGoogleAndDelete() async {
+    try {
+      await _service.reauthenticateWithGoogle();
+      await _service.deleteAccount(uid);
+    } catch (e) {
+      debugPrint('reauthenticateWithGoogleAndDelete failed: $e');
+      rethrow;
+    }
+    _profile = const Profile(name: 'Người dùng');
+    notifyListeners();
+  }
+
+  /// Reauthenticate only (email/password) without deleting — useful if UI
+  /// needs to reauth before performing other operations.
+  Future<void> reauthenticateWithPassword(String password) async {
+    try {
+      await _service.reauthenticateCurrentUser(password);
+    } catch (e) {
+      debugPrint('reauthenticateWithPassword failed: $e');
+      rethrow;
+    }
   }
 
   /// Change password for the current user via ProfileService. Returns true
