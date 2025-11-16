@@ -60,26 +60,6 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Top-right skip button
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 12,
-            right: 16,
-            child: SafeArea(
-              child: TextButton(
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  try {
-                    await ref.read(introStatusProvider.notifier).markAsSeen();
-                  } catch (e) {
-                    debugPrint('Failed to persist intro flag on skip: $e');
-                  }
-                  if (!navigator.mounted) return;
-                  navigator.pushNamedAndRemoveUntil('/login', (r) => false);
-                },
-                child: const Text('Bỏ qua'),
-              ),
-            ),
-          ),
           // PageView for screens
           PageView.builder(
             controller: _pageController,
@@ -90,6 +70,41 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
             },
             itemCount: _screens.length,
             itemBuilder: (context, index) => _screens[index],
+          ),
+          // Top-right skip button (render on top of PageView)
+          Positioned(
+            top: 0,
+            right: 16,
+            child: SafeArea(
+              top: true,
+              bottom: false,
+              left: false,
+              right: false,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: OnboardingTheme.primaryColor,
+                    backgroundColor: Colors.white.withOpacity(0.12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    try {
+                      await ref.read(introStatusProvider.notifier).markAsSeen();
+                    } catch (e) {
+                      debugPrint('Failed to persist intro flag on skip: $e');
+                    }
+                    if (!navigator.mounted) return;
+                    navigator.pushNamedAndRemoveUntil('/login', (r) => false);
+                  },
+                  child: const Text('Bỏ qua'),
+                ),
+              ),
+            ),
           ),
           // Bottom section with dots and button
           Positioned(
