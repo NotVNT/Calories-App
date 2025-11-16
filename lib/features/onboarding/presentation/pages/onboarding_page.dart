@@ -84,12 +84,16 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                 padding: const EdgeInsets.only(top: 12.0),
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    foregroundColor: OnboardingTheme.primaryColor,
-                    backgroundColor: Colors.white.withOpacity(0.12),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    foregroundColor: OnboardingTheme.whiteColor,
+                    backgroundColor: OnboardingTheme.primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
                     ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
                   ),
                   onPressed: () async {
                     final navigator = Navigator.of(context);
